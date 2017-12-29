@@ -1,0 +1,16 @@
+//.css文件用webpack编译不能直接用，需要loader;
+//css-loader使得webpack能处理.css文件；style-loader是加一个style标签加入到html里面；
+//require引用css
+require('style-loader!css-loader ./style.css');
+//命令行编译css
+webpack hello.js hello.bundle.js --module-bind css="style-loader!css-loader" 
+//不想每次都执行以下命令
+webpack hello.js hello.bundle.js --module-bind css="style-loader!css-loader" --watch
+//展示每次打包的所有模块
+
+webpack hello.js hello.bundle.js --module-bind css="style-loader!css-loader" --display-modules
+//打包进度
+
+webpack hello.js hello.bundle.js --module-bind css="style-loader!css-loader"  --progress
+//webpack会默认执行webpack.config.js;要想执行webpack.dev.config.js
+webpack --config webpack.dev.config.js

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>综合测试</title>
+	</head>
+	<style>
+		#app{
+			width: 1200px;
+			margin: 0 auto;
+		}
+		#box{
+			height: 30px;
+			line-height: 30px;
+			width: 1200px;
+			border: 1px solid #CCCCCC;
+		}
+		.checkBox li{
+			padding-left: 30px;
+		}
+		.hide{
+			display: none;
+		}
+		.imgTrue{
+			background: url(img/chose/chosed.png) no-repeat left center;
+		}
+		.imgFalse{
+			background: url(img/chose/chose.png) no-repeat left center;
+			
+		}
+		
+	</style>
+	
+	
+	<body>
+		<div id="app">
+			<div id="box">
+				<a v-for="key in lists">{{key}}<span>,</span></a>
+			</div>
+			<div class="tagchose">
+                <div class="tagshow">
+                	<button @click="tagshow">请选择</button>
+                </div>
+                <ul class="checkBox" :class="{ hide: isHide }">
+                	<li @click="isCheck(0)" :class="[stateList.list0 ? 'imgTrue' : 'imgFalse']">星泓资本</li>
+                	<li @click="isCheck(1)" :class="[stateList.list1 ? 'imgTrue' : 'imgFalse']" >复地</li>
+                	<li @click="isCheck(2)" :class="[stateList.list2 ? 'imgTrue' : 'imgFalse']" >星豫资本</li>
+                	<li @click="isCheck(3)" :class="[stateList.list3 ? 'imgTrue' : 'imgFalse']" >BFC</li>
+                	<li @click="isCheck(4)" :class="[stateList.list4 ? 'imgTrue' : 'imgFalse']" >星颐资本</li>
+                </ul>
+            </div>		
+			<p><button :class="['tagchose' ,isShow ? 'open' : '']" @click="btn">提交</button></p>
+			
+			
+		</div>
+	</body>
+	<script type="text/javascript" src="js/vue.min.js" ></script>
+	<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+	<script>
+		var vm = new Vue({
+			el: "#app" ,
+			data: {
+				isShow:true ,
+				lists:[],
+				isHide: true,
+				stateList:{
+					list0 : false ,
+					list1 : false ,
+					list2 : false ,
+					list3 : false ,
+					list4 : false ,
+				}
+			},
+			methods:{
+				removeByValue(arr, val) {
+					for(var i=0; i<arr.length; i++) {
+					    if(arr[i] == val) {
+					      arr.splice(i, 1);
+					      break;
+					    }
+					}
+					return arr ;
+				},
+				tagshow(){
+					this.isHide = !this.isHide
+				},
+				isCheck(index){
+					console.log(index)
+					switch(index){
+						case 0 :
+							this.stateList.list0 = !this.stateList.list0	;
+							if(this.stateList.list0 == true){
+								this.lists.push("星浩资本")
+							}else{
+								this.lists = this.removeByValue(this.lists, "星浩资本")
+							} ;
+							break 	;
+						case 1 :	
+							this.stateList.list1 = !this.stateList.list1	;
+							if(this.stateList.list1 == true){
+								this.lists.push("复地")
+							}else{
+								this.lists = this.removeByValue(this.lists, "复地")
+							} ;
+							break 	;
+						case 2 :
+							this.stateList.list2 = !this.stateList.list2	;
+							if(this.stateList.list2 == true){
+								this.lists.push("星豫资本")
+							}else{
+								this.lists = this.removeByValue(this.lists, "星豫资本")
+							} ;
+							break 	;
+						case 3 :
+							this.stateList.list3 = !this.stateList.list3	;
+							if(this.stateList.list3 == true){
+								this.lists.push("BFC")
+							}else{
+								this.lists = this.removeByValue(this.lists, "BFC")
+							} ;
+							break 	;
+						case 4 :
+							this.stateList.list4 = !this.stateList.list4	;
+							if(this.stateList.list4 == true){
+								this.lists.push("星颐资本")
+							}else{
+								this.lists = this.removeByValue(this.lists, "星颐资本")
+							} ;
+							break 	;
+					}
+				},
+				btn(){
+					str = "" ;
+					for(var i = 0 ; i < this.lists.length ; i++){
+						str += this.lists[i]+","
+					}
+					console.log("str:",str)
+				}
+			}
+		})
+	</script>
+</html>
+<style>
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, input, p, blockquote, th, td { margin:0; padding:0; }
+body { font:14px "微软雅黑"; color:#333; background:#fff;}
+
+img { border:0; }
+ol, ul { list-style:none; }
+h1, h2, h3, h4, h5, h6{ font-size:100%; }
+em { font-style:normal; }
+input, button, select, textarea { outline:none; font-size: 0.32rem;} 
+textarea { resize:none; }
+p{ text-align:justify;}
+a { color: #666; text-decoration:none; }
+a:hover { color: #f60; text-decoration:none; }
+
+.clear:after{content:"";/*里面可以为空、内容的意思*/
+				visibility:hidden; /*隐藏*/
+				height:0;
+				display:block;
+				clear:both;
+				overflow:hidden;
+}
+.clear{zoom:1;/*这个转为解决IE6的bug的*/}
+</style>
