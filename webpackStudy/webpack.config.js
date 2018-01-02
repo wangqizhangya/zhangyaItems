@@ -1,69 +1,144 @@
 var path=require('path');
-//使每次打包后的js自动加入index.html中
+var webpack=require('webpack');
 var htmlWebpackPlugin=require('html-webpack-plugin')
 module.exports={
-//	entry:'./src/script/main.js',
-//	entry:['./src/script/main.js','./src/script/a.js'],
 	entry:{
-		main:'./src/script/main.js',
-		a:'./src/script/a.js',
-		b:'./src/script/b.js',
-		c:'./src/script/c.js'
+		main:'./src/app.js'
+		
 	},
 	output:{
 		path:path.join(__dirname,'dist'),
-		//name就是多入口的键值
-//		filename:'[name]-[hash].js',
-//js/是添加的相对路径
-		filename:'js/[name]-[chunkhash].js',
-		//当项目上线的时候，如果js地址换了的话
-		publicPath:'http://cdn.com/'
+		filename:'js/[name].bundle.js'
+	},
+	module:{
+		 rules : [
+            {
+                test : /\.js$/,
+                loader : 'babel-loader',
+                exclude : path.resolve(__dirname,'node_modules'),
+                include : path.resolve(__dirname,'src'),
+               
+                query : {
+                    presets : ['latest']
+                }
+            },
+            {
+                test : /\.html$/,
+                loader : 'html-loader'
+               
+            },
+//          {
+//              test : /\.(png|jpg|gif|svg)$/i,
+//              loader : 'file-loader',
+//              query:{
+//              	name:'assets/[name]-[hash].[ext]'
+//          	}
+//             
+//          },
+            //当图片的大小大于限制就会丢给fileloader去处理，没超过就自己处理
+            {
+                test : /\.(png|jpg|gif|svg)$/i,
+                loaders : [
+                	'url-loader?limit=1000&name=assets/[name]-[hash].[ext]',
+                	'image-webpack-loader'
+                ]
+                
+               
+               
+            },
+            {
+                test : /\.css$/,
+                use : [
+                    {
+                        loader : 'style-loader'
+                    },
+                    {
+                          loader: 'css-loader?importLoaders: 1'
+                          
+                    },
+                    {
+                        loader: 'postcss-loader',
+                           options : {
+                               plugins : function() {
+                                   return [
+                                       require('autoprefixer')({
+                                           broswers : ['last 5 versions']
+                                       })
+                                   ];
+                               }
+                           }
+                    }
+                ]
+            },
+            {
+                test : /\.less$/,
+                use : [
+                    {
+                        loader : 'style-loader'
+                    },
+                    {
+                          loader: 'css-loader?importLoaders: 1'
+                          
+                    },
+                    {
+                        loader: 'postcss-loader',
+                           options : {
+                               plugins : function() {
+                                   return [
+                                       require('autoprefixer')({
+                                           broswers : ['last 5 versions']
+                                       })
+                                   ];
+                               }
+                           }
+                    },
+                    {
+                        loader : 'less-loader'
+                    }
+                    
+                ]
+            },
+             {
+                test : /\.scss$/,
+                use : [
+                    {
+                        loader : 'style-loader'
+                    },
+                    {
+                          loader: 'css-loader?importLoaders: 1'
+                          
+                    },
+                    {
+                        loader: 'postcss-loader',
+                           options : {
+                               plugins : function() {
+                                   return [
+                                       require('autoprefixer')({
+                                           broswers : ['last 5 versions']
+                                       })
+                                   ];
+                               }
+                           }
+                    },
+                    {
+                        loader : 'sass-loader'
+                    }
+                    
+                ]
+            }
+            
+            
+        ]
 	},
 	plugins:[
-	//初始化插件,以根目录下的index.html为模板生成dist中的index.html
 		new htmlWebpackPlugin({
-			filename:'a.html',
+			
+			filename:'index.html',
 			template:'index.html',
-			//想把引用的js放在head标签还是body标签
-			inject:'body',
-			//这个title可以在index.html中直接引用<%= htmlWebpackPlugin.options.title %>;
-			title:'this is a.html',
-			date:new Date(),
-			//对当前生成的html进行压缩
-			minify:{
-				//删除注释
-				removeComments:true,
-				//删除空格
-				collapseWhitespace:true
-				
-			},
-			//限制你想引用的chunks,entry的键值
-			chunks:['main','a']
-		}),
-		new htmlWebpackPlugin({
-			filename:'b.html',
-			template:'index.html',
-			//想把引用的js放在head标签还是body标签
-			inject:'body',
-			//这个title可以在index.html中直接引用<%= htmlWebpackPlugin.options.title %>;
-			title:'this is b.html',
-			chunks:['b']
-			
-		
-		}),
-		new htmlWebpackPlugin({
-			filename:'c.html',
-			template:'index.html',
-			//想把引用的js放在head标签还是body标签
-			inject:'body',
-			//这个title可以在index.html中直接引用<%= htmlWebpackPlugin.options.title %>;
-			title:'this is c.html',
-			
-			//排除一些chunks，其他都加载
-			
-			excludeChunks:['a']
-			
+			inject:'body'
 		})
+		
+		
 	]
 	
 }
